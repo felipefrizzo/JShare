@@ -68,17 +68,23 @@ public class ServerController implements IServer {
                         break;
                     case EXTENSAO:
                         if (file.getExtensao().contains(filtro)) {
-                            list.add(file);
+                            if (file.getNome().contains(query)) {
+                                list.add(file);
+                            }
                         }
                         break;
                     case TAMANHO_MAX:
                         if (file.getTamanho() <= Integer.valueOf(filtro)) {
-                            list.add(file);
+                            if (file.getNome().contains(query)) {
+                                list.add(file);
+                            }
                         }
                         break;
                     case TAMANHO_MIN:
                         if (file.getTamanho() >= Integer.valueOf(filtro)) {
-                            list.add(file);
+                            if (file.getNome().contains(query)) {
+                                list.add(file);
+                            }
                         }
                         break;
                     default:
