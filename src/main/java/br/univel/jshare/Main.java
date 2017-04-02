@@ -17,6 +17,7 @@ import java.util.Objects;
 public class Main extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private final ServerController server = new ServerController();
 
     public static void main(String[] args) {
         launch(args);
@@ -24,6 +25,10 @@ public class Main extends Application {
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public ServerController getServer() {
+        return server;
     }
 
     @Override
