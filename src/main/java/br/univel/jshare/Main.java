@@ -1,6 +1,7 @@
 package br.univel.jshare;
 
-import br.univel.jshare.view.ConnectServerConroller;
+import br.univel.jshare.controller.ServerController;
+import br.univel.jshare.controller.ConnectServerConroller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

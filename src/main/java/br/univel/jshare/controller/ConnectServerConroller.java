@@ -1,4 +1,4 @@
-package br.univel.jshare.view;
+package br.univel.jshare.controller;
 
 import br.univel.jshare.Main;
 import javafx.fxml.FXML;
