@@ -1,22 +1,37 @@
 package br.univel.jshare.controller;
 
+import br.univel.jshare.Main;
 import br.univel.jshare.comum.Arquivo;
 import br.univel.jshare.comum.Cliente;
 import br.univel.jshare.comum.IServer;
 import br.univel.jshare.comum.TipoFiltro;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
 /**
  * Created by felipefrizzo on 02/04/17.
  */
 public class ServerController implements IServer {
+    private Main main;
     private Map<Cliente, List<Arquivo>> clientMap = new HashMap<>();
+
+    public void setMain(final Main main) {
+        Objects.requireNonNull(main, "Main class cannot be null");
+
+        this.main = main;
+    }
 
     @Override
     public void registrarCliente(Cliente c) throws RemoteException {
@@ -124,6 +139,42 @@ public class ServerController implements IServer {
             System.out.println("User:" + c.getNome() + " with IP:" + c.getIp() + " is offline");
         } else {
             System.out.println("Client not found");
+        }
+    }
+
+    public void startServer() {
+        ServerController server = new ServerController();
+
+        IServer service;
+
+        try {
+            service = (IServer) UnicastRemoteObject.exportObject(server, 0);
+            Registry registry = LocateRegistry.createRegistry(8080);
+            registry.bind(IServer.NOME_SERVICO, service);
+
+            this.main.setServer(service);
+            this.main.setRegistryServer(registry);
+
+            System.out.println("Server is Online on IP: " + InetAddress.getLocalHost().getHostAddress());
+
+        } catch (RemoteException | AlreadyBoundException | UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void connectServer(final String ip, final Integer port) {
+        Objects.requireNonNull(ip, "IP cannot be null");
+        Objects.requireNonNull(port, "Port cannot be null");
+        Registry registry;
+
+        try {
+            registry = LocateRegistry.getRegistry(ip, port);
+            IServer service = (IServer) registry.lookup(IServer.NOME_SERVICO);
+
+            this.main.setRegistryClient(registry);
+            this.main.setClient(service);
+        } catch (RemoteException | NotBoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -26,6 +26,12 @@ public class ConnectServerConroller {
     @FXML
     private Button btnDisconnect;
 
+    @FXML
+    private Button btnStartServer;
+
+    @FXML
+    private Button btnStopServer;
+
     public void setMain(final Main main) {
         Objects.requireNonNull(main, "Main class cannot be null");
 
@@ -42,6 +48,22 @@ public class ConnectServerConroller {
     @FXML
     void handleDisconnect() {
         changeState();
+    }
+
+
+    @FXML
+    void handleStartServer() {
+        changeBtnServerState();
+    }
+
+    @FXML
+    void handleStopServer() {
+        changeBtnServerState();
+    }
+
+    private void changeBtnServerState() {
+        this.btnStartServer.setVisible(!this.btnStartServer.isVisible());
+        this.btnStopServer.setVisible(!this.btnStopServer.isVisible());
     }
 
     private void changeState() {
