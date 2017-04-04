@@ -42,6 +42,7 @@ public class ConnectServerConroller {
     void handleConnect() {
         if (isValid()) {
             changeState();
+            this.main.getServerController().connectServer(textFieldIp.getText(), Integer.parseInt(textFieldPort.getText()));
         }
     }
 
@@ -54,11 +55,13 @@ public class ConnectServerConroller {
     @FXML
     void handleStartServer() {
         changeBtnServerState();
+        this.main.getServerController().startServer();
     }
 
     @FXML
     void handleStopServer() {
         changeBtnServerState();
+        this.main.getServerController().stopServer();
     }
 
     private void changeBtnServerState() {

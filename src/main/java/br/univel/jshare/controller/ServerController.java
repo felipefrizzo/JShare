@@ -162,9 +162,34 @@ public class ServerController implements IServer {
         }
     }
 
+    public void stopServer() {
+        try {
+            this.main.getRegistryServer().unbind(IServer.NOME_SERVICO);
+
+            System.out.println("Server is Offline");
+
+            this.main.setRegistryServer(null);
+            this.main.setRegistryClient(null);
+            this.main.setServer(null);
+            this.main.setClient(null);
+        } catch (RemoteException | NotBoundException  e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void connectServer(final String ip, final Integer port) {
         Objects.requireNonNull(ip, "IP cannot be null");
         Objects.requireNonNull(port, "Port cannot be null");
+
+        Cliente cliente = new Cliente();
+        try {
+            cliente.setNome("FFrizzo");
+            cliente.setIp(InetAddress.getLocalHost().getHostAddress());
+            cliente.setPorta(8080);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
         Registry registry;
 
         try {
@@ -173,6 +198,9 @@ public class ServerController implements IServer {
 
             this.main.setRegistryClient(registry);
             this.main.setClient(service);
+            registrarCliente(cliente);
+
+            System.out.println("Connect on server");
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         }
