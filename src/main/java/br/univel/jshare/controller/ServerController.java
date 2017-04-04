@@ -40,7 +40,7 @@ public class ServerController implements IServer {
         List<Arquivo> list = new ArrayList<>();
         if (!clientMap.containsKey(c)) {
             clientMap.put(c, list);
-            System.out.println("Client registered");
+            System.out.println("Client " + c.getNome() + "registered");
         } else {
             System.out.println("Client already registered");
         }
@@ -148,6 +148,7 @@ public class ServerController implements IServer {
         IServer service;
 
         try {
+            System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostAddress());
             service = (IServer) UnicastRemoteObject.exportObject(server, 0);
             Registry registry = LocateRegistry.createRegistry(8080);
             registry.bind(IServer.NOME_SERVICO, service);

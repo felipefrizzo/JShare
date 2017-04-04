@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="535.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.univel.jshare.controller.FilesController">
+   <children>
+      <Label layoutX="20.0" layoutY="14.0" text="Search" />
+      <TextField fx:id="textFieldSearch" layoutX="94.0" layoutY="9.0" prefHeight="27.0" prefWidth="376.0" />
+      <Label layoutX="20.0" layoutY="45.0" text="Type Filter" />
+      <ComboBox fx:id="boxTypeFilter" layoutX="94.0" layoutY="40.0" prefHeight="27.0" prefWidth="376.0" />
+      <Label layoutX="485.0" layoutY="14.0" text="Filter" />
+      <TextField fx:id="textFieldFilter" layoutX="520.0" layoutY="9.0" prefHeight="27.0" prefWidth="66.0" />
+      <Button layoutX="486.0" layoutY="40.0" mnemonicParsing="false" onAction="#handleSearch" prefHeight="27.0" prefWidth="100.0" text="Search" />
+      <Separator layoutY="75.0" prefWidth="600.0" />
+      <Separator layoutX="1.0" layoutY="488.0" prefWidth="600.0" />
+      <Button layoutX="4.0" layoutY="499.0" mnemonicParsing="false" onAction="#handleDownload" prefHeight="27.0" prefWidth="592.0" text="Download" />
+      <TreeView fx:id="treeView" layoutX="3.0" layoutY="84.0" prefHeight="398.0" prefWidth="592.0" />
+   </children>
+</AnchorPane>

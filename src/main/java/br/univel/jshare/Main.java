@@ -1,6 +1,7 @@
 package br.univel.jshare;
 
 import br.univel.jshare.comum.IServer;
+import br.univel.jshare.controller.FilesController;
 import br.univel.jshare.controller.ServerController;
 import br.univel.jshare.controller.ConnectServerConroller;
 import javafx.application.Application;
@@ -50,6 +51,7 @@ public class Main extends Application {
 
         initRootLayout();
         showConnectServerLayout();
+        showFilesLayout();
     }
 
     private void initRootLayout() {
@@ -74,6 +76,22 @@ public class Main extends Application {
             rootLayout.setLeft(layout);
 
             ConnectServerConroller controller = loader.getController();
+
+            controller.setMain(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void showFilesLayout() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("view/FilesLayout.fxml"));
+
+            AnchorPane layout = loader.load();
+            rootLayout.setCenter(layout);
+
+            FilesController controller = loader.getController();
 
             controller.setMain(this);
         } catch (IOException e) {
