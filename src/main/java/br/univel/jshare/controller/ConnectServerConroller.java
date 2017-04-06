@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.rmi.RemoteException;
 import java.util.Objects;
 
 /**
@@ -48,7 +49,12 @@ public class ConnectServerConroller {
 
     @FXML
     void handleDisconnect() {
-        changeState();
+        try {
+            changeState();
+            this.main.getClient().desconectar(this.main.getClienteGlobal());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

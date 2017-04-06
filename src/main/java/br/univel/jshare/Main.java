@@ -1,5 +1,6 @@
 package br.univel.jshare;
 
+import br.univel.jshare.comum.Cliente;
 import br.univel.jshare.comum.IServer;
 import br.univel.jshare.controller.FilesController;
 import br.univel.jshare.controller.ServerController;
@@ -12,6 +13,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.registry.Registry;
 import java.util.Objects;
 
@@ -19,6 +22,7 @@ import java.util.Objects;
  * Created by felipefrizzo on 02/04/17.
  */
 public class Main extends Application {
+    private String PORT;
     private Registry registryClient;
     private Registry registryServer;
     private IServer server;
@@ -27,6 +31,28 @@ public class Main extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
     private final ServerController serverController = new ServerController();
+
+    private Cliente clienteGlobal = new Cliente();
+
+    public Main() {
+        try {
+            clienteGlobal.setNome("FFrizzo");
+            clienteGlobal.setIp(InetAddress.getLocalHost().getHostAddress());
+            clienteGlobal.setPorta(8080);
+
+            PORT = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Cliente getClienteGlobal() {
+        return clienteGlobal;
+    }
+
+    public String getPORT() {
+        return PORT;
+    }
 
     public static void main(String[] args) {
         launch(args);

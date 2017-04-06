@@ -5,10 +5,10 @@ import br.univel.jshare.comum.Arquivo;
 import br.univel.jshare.comum.Cliente;
 import br.univel.jshare.comum.IServer;
 import br.univel.jshare.comum.TipoFiltro;
+import br.univel.jshare.validator.MD5Validator;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,7 +40,7 @@ public class ServerController implements IServer {
         List<Arquivo> list = new ArrayList<>();
         if (!clientMap.containsKey(c)) {
             clientMap.put(c, list);
-            System.out.println("Client " + c.getNome() + "registered");
+            System.out.println("Client " + c.getNome() + " registered");
         } else {
             System.out.println("Client already registered");
         }
@@ -57,6 +57,7 @@ public class ServerController implements IServer {
                     map.setValue(lista);
                 }
             });
+            System.out.println(c.getNome() + " published new updates");
         } else {
             System.out.println("Client not found");
         }
@@ -65,50 +66,44 @@ public class ServerController implements IServer {
     @Override
     public Map<Cliente, List<Arquivo>> procurarArquivo(String query, TipoFiltro tipoFiltro, String filtro) throws RemoteException {
         Map<Cliente, List<Arquivo>> resultMap = new HashMap<>();
-        List<Arquivo> list = new ArrayList<>();
 
-        for (Map.Entry<Cliente, List<Arquivo>> clientListEntry : clientMap.entrySet()) {
-            Cliente client = new Cliente();
-            client.setNome(clientListEntry.getKey().getNome());
-            client.setId(clientListEntry.getKey().getId());
-            client.setPorta(clientListEntry.getKey().getPorta());
+        clientMap.forEach((key, value) -> {
+            List<Arquivo> list = new ArrayList<>();
 
-            list.clear();
-            for (Arquivo file : clientListEntry.getValue()) {
+            value.forEach(v -> {
                 switch (tipoFiltro) {
                     case NOME:
-                        if (file.getNome().contains(query)) {
-                            list.add(file);
+                        if (v.getNome().toLowerCase().contains(query.toLowerCase())) {
+                            list.add(v);
                         }
                         break;
                     case EXTENSAO:
-                        if (file.getExtensao().contains(filtro)) {
-                            if (file.getNome().contains(query)) {
-                                list.add(file);
+                        if (v.getExtensao().toLowerCase().contains(filtro.toLowerCase())) {
+                            if (v.getNome().toLowerCase().contains(query.toLowerCase())) {
+                                list.add(v);
                             }
                         }
                         break;
                     case TAMANHO_MAX:
-                        if (file.getTamanho() <= Integer.valueOf(filtro)) {
-                            if (file.getNome().contains(query)) {
-                                list.add(file);
+                        if (v.getTamanho() >= Integer.valueOf(filtro)) {
+                            if (v.getNome().toLowerCase().contains(query.toLowerCase())) {
+                                list.add(v);
                             }
                         }
                         break;
                     case TAMANHO_MIN:
-                        if (file.getTamanho() >= Integer.valueOf(filtro)) {
-                            if (file.getNome().contains(query)) {
-                                list.add(file);
+                        if (v.getTamanho() <= Integer.valueOf(filtro)) {
+                            if (v.getNome().toLowerCase().contains(query.toLowerCase())) {
+                                list.add(v);
                             }
                         }
                         break;
-                    default:
-                        list.add(file);
-                        break;
                 }
-            }
-            resultMap.put(client, list);
-        }
+            });
+
+            resultMap.put(key, list);
+        });
+
         return resultMap;
     }
 
@@ -148,7 +143,7 @@ public class ServerController implements IServer {
         IServer service;
 
         try {
-            System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostAddress());
+            System.setProperty("java.rmi.server.hostname", this.main.getPORT());
             service = (IServer) UnicastRemoteObject.exportObject(server, 0);
             Registry registry = LocateRegistry.createRegistry(8080);
             registry.bind(IServer.NOME_SERVICO, service);
@@ -156,9 +151,9 @@ public class ServerController implements IServer {
             this.main.setServer(service);
             this.main.setRegistryServer(registry);
 
-            System.out.println("Server is Online on IP: " + InetAddress.getLocalHost().getHostAddress());
+            System.out.println("Server is Online on IP: " + this.main.getPORT());
 
-        } catch (RemoteException | AlreadyBoundException | UnknownHostException e) {
+        } catch (RemoteException | AlreadyBoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -182,15 +177,6 @@ public class ServerController implements IServer {
         Objects.requireNonNull(ip, "IP cannot be null");
         Objects.requireNonNull(port, "Port cannot be null");
 
-        Cliente cliente = new Cliente();
-        try {
-            cliente.setNome("FFrizzo");
-            cliente.setIp(InetAddress.getLocalHost().getHostAddress());
-            cliente.setPorta(8080);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
         Registry registry;
 
         try {
@@ -199,11 +185,63 @@ public class ServerController implements IServer {
 
             this.main.setRegistryClient(registry);
             this.main.setClient(service);
-            registrarCliente(cliente);
+
+            this.main.getClient().registrarCliente(this.main.getClienteGlobal());
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        uploadFile();
+
+                        try {
+                            Thread.sleep(100000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            }).start();
 
             System.out.println("Connect on server");
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private List<Arquivo> listLocalFiles() {
+        File fileDir = new File("." + File.separatorChar + "shared" + File.separatorChar);
+
+        List<Arquivo> listFiles = new ArrayList<>();
+        for (File f : fileDir.listFiles()) {
+            if (f.isFile()) {
+                Arquivo a = new Arquivo();
+
+                a.setNome(f.getName());
+                a.setPath(f.getPath());
+                a.setTamanho(f.length());
+                a.setMd5(MD5Validator.getMD5Checksum(f.getPath()));
+                a.setDataHoraModificacao(new Date(f.lastModified()));
+                String extensao = f.getName().substring(f.getName().lastIndexOf("."), f.getName().length());
+                a.setExtensao(extensao);
+
+                listFiles.add(a);
+            }
+        }
+
+        return listFiles;
+    }
+
+    public void uploadFile() {
+        List<Arquivo> list = listLocalFiles();
+
+        try {
+            this.main.getClient().publicarListaArquivos(this.main.getClienteGlobal(), list);
+
+            System.out.println("Update list file");
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
