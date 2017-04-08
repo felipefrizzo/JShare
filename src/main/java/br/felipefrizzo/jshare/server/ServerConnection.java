@@ -1,10 +1,10 @@
 package br.felipefrizzo.jshare.server;
 
 import br.felipefrizzo.jshare.Main;
-import br.univel.jshare.comum.Arquivo;
-import br.univel.jshare.comum.Cliente;
-import br.univel.jshare.comum.IServer;
-import br.univel.jshare.comum.TipoFiltro;
+import br.felipefrizzo.jshare.comum.Arquivo;
+import br.felipefrizzo.jshare.comum.Cliente;
+import br.felipefrizzo.jshare.comum.IServer;
+import br.felipefrizzo.jshare.comum.TipoFiltro;
 
 import java.io.IOException;
 import java.nio.file.Files;

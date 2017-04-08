@@ -4,7 +4,7 @@ import br.felipefrizzo.jshare.client.ClientConnection;
 import br.felipefrizzo.jshare.controller.ClientLayoutController;
 import br.felipefrizzo.jshare.controller.ServerLayoutController;
 import br.felipefrizzo.jshare.server.ServerConnection;
-import br.univel.jshare.comum.Cliente;
+import br.felipefrizzo.jshare.comum.Cliente;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

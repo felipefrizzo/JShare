@@ -1,9 +1,9 @@
 package br.felipefrizzo.jshare.client;
 
 import br.felipefrizzo.jshare.Main;
-import br.univel.jshare.comum.Arquivo;
-import br.univel.jshare.comum.IServer;
-import br.univel.jshare.validator.MD5Validator;
+import br.felipefrizzo.jshare.comum.Arquivo;
+import br.felipefrizzo.jshare.comum.IServer;
+import br.felipefrizzo.jshare.validator.MD5Validator;
 
 import java.io.File;
 import java.rmi.NotBoundException;

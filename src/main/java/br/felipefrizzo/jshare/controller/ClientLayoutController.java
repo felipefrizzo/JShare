@@ -1,12 +1,10 @@
 package br.felipefrizzo.jshare.controller;
 
 import br.felipefrizzo.jshare.Main;
-import br.univel.jshare.comum.Arquivo;
-import br.univel.jshare.comum.Cliente;
-import br.univel.jshare.comum.TipoFiltro;
-import br.univel.jshare.validator.MD5Validator;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import br.felipefrizzo.jshare.comum.Arquivo;
+import br.felipefrizzo.jshare.comum.Cliente;
+import br.felipefrizzo.jshare.comum.TipoFiltro;
+import br.felipefrizzo.jshare.validator.MD5Validator;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
