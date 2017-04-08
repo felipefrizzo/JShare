@@ -1,6 +1,6 @@
-package br.felipefrizzo.jshare.controller;
+package br.univel.jshare.controller;
 
-import br.felipefrizzo.jshare.Main;
+import br.univel.jshare.Main;
 import javafx.scene.control.Alert;
 
 import java.util.Objects;

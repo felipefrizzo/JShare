@@ -1,4 +1,4 @@
-package br.felipefrizzo.jshare.comum;
+package br.univel.jshare.comum;
 
 public enum TipoFiltro {
     NOME("NOME"),

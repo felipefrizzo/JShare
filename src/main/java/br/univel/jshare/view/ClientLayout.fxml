@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane prefHeight="535.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.felipefrizzo.jshare.controller.ClientLayoutController">
+<AnchorPane prefHeight="535.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.univel.jshare.controller.ClientLayoutController">
    <children>
       <StackPane fx:id="stackPane" layoutY="70.0" prefHeight="465.0" prefWidth="545.0" />
       <Pane prefHeight="74.0" prefWidth="550.0">

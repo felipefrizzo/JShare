@@ -1,4 +1,4 @@
-package br.felipefrizzo.jshare.validator;
+package br.univel.jshare.validator;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
