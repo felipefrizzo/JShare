@@ -3,10 +3,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane prefHeight="530.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.univel.jshare.controller.ServerLayoutController">
    <children>
@@ -30,7 +30,7 @@
       <Separator layoutY="175.0" prefWidth="250.0" />
       <Pane layoutY="178.0" prefHeight="350.0" prefWidth="250.0">
          <children>
-            <TextArea fx:id="filedServerLog" layoutX="5.0" layoutY="5.0" prefHeight="340.0" prefWidth="240.0" />
+            <TextFlow fx:id="flow" layoutX="2.0" layoutY="2.5" prefHeight="343.0" prefWidth="245.0" style="-fx-background-color: #000; -fx-border-color: #FFF;" />
          </children>
       </Pane>
       <Separator layoutX="248.0" orientation="VERTICAL" prefHeight="530.0" />

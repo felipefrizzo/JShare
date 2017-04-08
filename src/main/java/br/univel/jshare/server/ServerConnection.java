@@ -5,6 +5,8 @@ import br.univel.jshare.comum.Arquivo;
 import br.univel.jshare.comum.Cliente;
 import br.univel.jshare.comum.IServer;
 import br.univel.jshare.comum.TipoFiltro;
+import br.univel.jshare.observers.ServerObserver;
+import com.sun.security.ntlm.Server;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +24,8 @@ import java.util.*;
  * Created by felipefrizzo on 06/04/17.
  */
 public class ServerConnection implements IServer {
+    private List<ServerObserver> observers = new ArrayList<>();
+
     private Main main;
     private Registry registry;
     private IServer service;
@@ -32,16 +36,27 @@ public class ServerConnection implements IServer {
         this.main = main;
     }
 
+    public void addObserver(final ServerObserver observer) {
+        Objects.requireNonNull(observer, "Observer cannot be null");
+        this.observers.add(observer);
+    }
+
+    public void notifyObservers(final String text) {
+        Objects.requireNonNull(text, "Text message cannot be null");
+        observers.forEach(observer -> observer.showLogInformation(text));
+    }
 
     @Override
     public void registrarCliente(final Cliente c) throws RemoteException {
         Objects.requireNonNull(c, "Client cannot be null");
 
         if (defaultMap.containsKey(c)) {
-            System.out.println("Client already registered");
+            notifyObservers("Client already registered");
+//            System.out.println("Client already registered");
         } else {
             defaultMap.put(c, null);
-            System.out.println("Client " + c.getNome() + " has registered with ip " + c.getIp());
+            notifyObservers("Client " + c.getNome() + " has registered with ip " + c.getIp());
+//            System.out.println("Client " + c.getNome() + " has registered with ip " + c.getIp());
         }
     }
 
@@ -57,9 +72,11 @@ public class ServerConnection implements IServer {
                 }
             });
 
-            System.out.println("Client " + c.getNome() + " published new files");
+            notifyObservers("Client " + c.getNome() + " published new files");
+//            System.out.println("Client " + c.getNome() + " published new files");
         } else {
-            System.out.println("Client not found");
+            notifyObservers("Client not found");
+//            System.out.println("Client not found");
         }
     }
 
@@ -122,7 +139,8 @@ public class ServerConnection implements IServer {
 
         try {
             data = Files.readAllBytes(path);
-            System.out.println("Client " + cli.getNome() + " downloaded file");
+            notifyObservers("Client " + cli.getNome() + " downloaded file");
+//            System.out.println("Client " + cli.getNome() + " downloaded file");
 
             return data;
         } catch (IOException e) {
@@ -137,23 +155,24 @@ public class ServerConnection implements IServer {
         if (defaultMap.containsKey(c)) {
             defaultMap.remove(c);
 
-            System.out.println("Client " + c.getNome() + " with IP " + c.getIp() + " is Offline");
+            notifyObservers("Client " + c.getNome() + " with IP " + c.getIp() + " is Offline");
+//            System.out.println("Client " + c.getNome() + " with IP " + c.getIp() + " is Offline");
         } else {
-            System.out.println("Client not found");
+            notifyObservers("Client not found");
+//            System.out.println("Client not found");
         }
     }
 
     public void startServer() {
-        ServerConnection server = new ServerConnection();
-
         try {
             System.setProperty("java.rmi.server.hostname", this.main.getIP());
-            service = (IServer) UnicastRemoteObject.exportObject(server, 0);
+            service = (IServer) UnicastRemoteObject.exportObject(this.main.getServerConnection(), 0);
             registry = LocateRegistry.createRegistry(this.main.getPort());
             registry.bind(IServer.NOME_SERVICO, service);
 
 
-            System.out.println("Server is Online on IP " + this.main.getIP() + " Port " + this.main.getPort());
+            notifyObservers("Server is Online on IP " + this.main.getIP() + " Port " + this.main.getPort());
+//            System.out.println("Server is Online on IP " + this.main.getIP() + " Port " + this.main.getPort());
 
         } catch (RemoteException | AlreadyBoundException e) {
             throw new RuntimeException(e);
@@ -164,7 +183,8 @@ public class ServerConnection implements IServer {
         try {
             registry.unbind(IServer.NOME_SERVICO);
 
-            System.out.println("Server is Offline");
+            notifyObservers("Server is Offline");
+//            System.out.println("Server is Offline");
         } catch (RemoteException | NotBoundException  e) {
             throw new RuntimeException(e);
         }

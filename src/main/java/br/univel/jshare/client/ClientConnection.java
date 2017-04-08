@@ -60,7 +60,6 @@ public class ClientConnection {
                     }
                 }
             }).start();
-            System.out.println("You logged in on the server");
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         }
@@ -92,8 +91,6 @@ public class ClientConnection {
     private void uploadFiles() {
         try {
             service.publicarListaArquivos(main.getDefaultClient(), getLocalFiles());
-
-            System.out.println("List of files updated");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

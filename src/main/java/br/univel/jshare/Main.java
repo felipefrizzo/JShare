@@ -112,6 +112,7 @@ public class Main extends Application {
             ServerLayoutController controller = loader.getController();
 
             controller.setMain(this);
+            server.addObserver(controller);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
