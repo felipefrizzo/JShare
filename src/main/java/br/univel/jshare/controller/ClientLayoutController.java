@@ -3,6 +3,7 @@ package br.univel.jshare.controller;
 import br.univel.jshare.Main;
 import br.univel.jshare.comum.Arquivo;
 import br.univel.jshare.comum.Cliente;
+import br.univel.jshare.comum.IServer;
 import br.univel.jshare.comum.TipoFiltro;
 import br.univel.jshare.validator.MD5Validator;
 import javafx.collections.FXCollections;
@@ -16,7 +17,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -72,8 +76,12 @@ public class ClientLayoutController {
                 value.forEach(v -> {
                     if (v.getNome().equals(file)) {
                         try {
-                            byte[] bytes = this.main.getClientConnection().getService().baixarArquivo(this.main.getDefaultClient(), v);
+                            Registry registry = LocateRegistry.getRegistry(key.getIp(), key.getPorta());
+                            IServer service = (IServer) registry.lookup(IServer.NOME_SERVICO);
+
+                            byte[] bytes = service.baixarArquivo(this.main.getDefaultClient(), v);
                             String fileName = name.replace(" ", "").toLowerCase() +  ".copy." + file;
+
 
                             File f = new File(fileName);
                             String filePath = "." + File.separatorChar + "shared" + File.separatorChar + f;
@@ -100,7 +108,7 @@ public class ClientLayoutController {
                                 );
                             }
 
-                        } catch (IOException e) {
+                        } catch (IOException | NotBoundException e) {
                             throw new RuntimeException(e);
                         }
                     }
