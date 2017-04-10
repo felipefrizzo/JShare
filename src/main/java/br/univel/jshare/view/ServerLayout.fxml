@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -30,7 +31,11 @@
       <Separator layoutY="175.0" prefWidth="250.0" />
       <Pane layoutY="178.0" prefHeight="350.0" prefWidth="250.0">
          <children>
-            <TextFlow fx:id="flow" layoutX="2.0" layoutY="2.5" prefHeight="343.0" prefWidth="245.0" style="-fx-background-color: #000; -fx-border-color: #FFF;" />
+            <ScrollPane prefHeight="350.0" prefWidth="249.0">
+               <content>
+                  <TextFlow fx:id="flow" prefHeight="343.0" prefWidth="245.0" style="-fx-background-color: #000; -fx-border-color: #FFF;" />
+               </content>
+            </ScrollPane>
          </children>
       </Pane>
       <Separator layoutX="248.0" orientation="VERTICAL" prefHeight="530.0" />
