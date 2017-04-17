@@ -100,6 +100,7 @@ public class ClientLayoutController implements ClientObserver {
                                     Alert.AlertType.INFORMATION
                                 );
                             } else {
+                            	Files.delete(path);
                                 AlertController.showError(
                                     this.main,
                                     "Download problem",
