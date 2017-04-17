@@ -73,12 +73,12 @@ public class ClientConnection {
             if (file.isFile()) {
                 Arquivo a = new Arquivo();
 
-                a.setNome(file.getName());
+                a.setNome(file.getName().substring(0, file.getName().lastIndexOf(".")));
                 a.setPath(file.getPath());
                 a.setTamanho(file.length());
                 a.setMd5(MD5Validator.getMD5Checksum(file.getPath()));
                 a.setDataHoraModificacao(new Date(file.lastModified()));
-                String extensao = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+                String extensao = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());
                 a.setExtensao(extensao);
 
                 files.add(a);

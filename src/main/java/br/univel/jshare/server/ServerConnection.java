@@ -159,13 +159,13 @@ public class ServerConnection implements IServer {
     public void startServer() {
         try {
             System.setProperty("java.rmi.server.hostname", this.main.getIP());
-            service = (IServer) UnicastRemoteObject.exportObject(this.main.getServerConnection(), 0);
+        	service = (IServer) UnicastRemoteObject.exportObject(this.main.getServerConnection(), 0);
             registry = LocateRegistry.createRegistry(this.main.getPort());
-            registry.bind(IServer.NOME_SERVICO, service);
+            registry.rebind(IServer.NOME_SERVICO, service);
 
 
             notifyObservers("Server is Online on IP " + this.main.getIP() + " Port " + this.main.getPort());
-        } catch (RemoteException | AlreadyBoundException e) {
+        } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }

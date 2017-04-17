@@ -74,13 +74,13 @@ public class ClientLayoutController {
         map.forEach((key, value) -> {
             if (key.getNome().equals(name)) {
                 value.forEach(v -> {
-                    if (v.getNome().equals(file)) {
+                    if (v.getNome().equals(file.substring(0, file.lastIndexOf(".")))) {
                         try {
                             Registry registry = LocateRegistry.getRegistry(key.getIp(), key.getPorta());
                             IServer service = (IServer) registry.lookup(IServer.NOME_SERVICO);
 
                             byte[] bytes = service.baixarArquivo(this.main.getDefaultClient(), v);
-                            String fileName = name.replace(" ", "").toLowerCase() +  ".copy." + file;
+                            String fileName = v.getNome() + "." + name.replace(" ", "").toLowerCase() + "." + v.getExtensao();
 
 
                             File f = new File(fileName);
@@ -127,7 +127,7 @@ public class ClientLayoutController {
                 parent = new TreeItem<>(key.getNome());
 
                 value.forEach(v -> {
-                    chieldren = new TreeItem<>(v.getNome());
+                    chieldren = new TreeItem<>(v.getNome() + "." + v.getExtensao());
                     parent.getChildren().add(chieldren);
                 });
 
