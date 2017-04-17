@@ -3,6 +3,7 @@ package br.univel.jshare.client;
 import br.univel.jshare.Main;
 import br.univel.jshare.comum.Arquivo;
 import br.univel.jshare.comum.IServer;
+import br.univel.jshare.observers.ClientObserver;
 import br.univel.jshare.validator.MD5Validator;
 
 import java.io.File;
@@ -19,6 +20,8 @@ import java.util.Objects;
  * Created by felipefrizzo on 06/04/17.
  */
 public class ClientConnection {
+	private List<ClientObserver> observers = new ArrayList<>();
+	
     private Main main;
     private Registry registry;
     private IServer service;
@@ -34,6 +37,15 @@ public class ClientConnection {
     public void setMain(final Main main) {
         Objects.requireNonNull(main, "Main class cannot be null");
         this.main = main;
+    }
+    
+    public void addObserver(final ClientObserver observer) {
+        Objects.requireNonNull(observer, "Observer cannot be null");
+        this.observers.add(observer);
+    }
+
+    public void notifyObservers() {
+        observers.forEach(observer -> observer.enableClientFields());
     }
 
     public void connect(final String ip, final Integer port) {
@@ -60,6 +72,8 @@ public class ClientConnection {
                     }
                 }
             }).start();
+            
+            notifyObservers();
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         }

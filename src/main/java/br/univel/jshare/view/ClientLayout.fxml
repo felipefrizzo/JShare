@@ -17,11 +17,11 @@
             <Label layoutX="5.0" layoutY="10.0" text="Search" />
             <Label layoutX="389.0" layoutY="10.0" text="Filter" />
             <Label layoutX="5.0" layoutY="40.0" text="TypeFilter" />
-            <TextField fx:id="fieldFilter" layoutX="423.0" layoutY="5.0" prefHeight="27.0" prefWidth="120.0" />
-            <TextField fx:id="fieldSearch" layoutX="71.0" layoutY="5.0" prefHeight="27.0" prefWidth="300.0" />
-            <ComboBox fx:id="fieldTypeFilter" layoutX="71.0" layoutY="35.0" prefHeight="27.0" prefWidth="300.0" />
-            <Button fx:id="btnSearch" layoutX="391.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleSearch" text="Search" />
-            <Button fx:id="btnDownload" layoutX="464.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleDownload" text="Download" />
+            <TextField fx:id="fieldFilter" layoutX="423.0" layoutY="5.0" prefHeight="27.0" prefWidth="120.0" disable="true" />
+            <TextField fx:id="fieldSearch" layoutX="71.0" layoutY="5.0" prefHeight="27.0" prefWidth="300.0" disable="true" />
+            <ComboBox fx:id="fieldTypeFilter" layoutX="71.0" layoutY="35.0" prefHeight="27.0" prefWidth="300.0" disable="true" />
+            <Button fx:id="btnSearch" layoutX="391.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleSearch" text="Search" disable="true" />
+            <Button fx:id="btnDownload" layoutX="464.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleDownload" text="Download" disable="true" />
             <Separator layoutY="70.0" prefWidth="550.0" />
          </children>
       </Pane>

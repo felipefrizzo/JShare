@@ -5,6 +5,7 @@ import br.univel.jshare.comum.Arquivo;
 import br.univel.jshare.comum.Cliente;
 import br.univel.jshare.comum.IServer;
 import br.univel.jshare.comum.TipoFiltro;
+import br.univel.jshare.observers.ClientObserver;
 import br.univel.jshare.validator.MD5Validator;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -28,7 +29,7 @@ import java.util.Objects;
 /**
  * Created by felipefrizzo on 06/04/17.
  */
-public class ClientLayoutController {
+public class ClientLayoutController implements ClientObserver {
     private Main main;
     private Map<Cliente, List<Arquivo>> map;
 
@@ -141,4 +142,13 @@ public class ClientLayoutController {
             throw new RuntimeException(e);
         }
     }
+
+	@Override
+	public void enableClientFields() {
+		fieldFilter.setDisable(!fieldFilter.isDisable());
+		fieldSearch.setDisable(!fieldSearch.isDisable());
+		fieldTypeFilter.setDisable(!fieldTypeFilter.isDisable());
+		btnDownload.setDisable(!btnDownload.isDisable());
+		btnSearch.setDisable(!btnSearch.isDisable());
+	}
 }

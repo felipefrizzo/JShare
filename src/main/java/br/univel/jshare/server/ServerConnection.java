@@ -5,6 +5,7 @@ import br.univel.jshare.comum.Arquivo;
 import br.univel.jshare.comum.Cliente;
 import br.univel.jshare.comum.IServer;
 import br.univel.jshare.comum.TipoFiltro;
+import br.univel.jshare.observers.ClientObserver;
 import br.univel.jshare.observers.ServerObserver;
 import com.sun.security.ntlm.Server;
 
@@ -25,6 +26,7 @@ import java.util.*;
  */
 public class ServerConnection implements IServer {
     private List<ServerObserver> observers = new ArrayList<>();
+    private List<ClientObserver> clientObservers = new ArrayList<>();
 
     private Main main;
     private Registry registry;
@@ -44,6 +46,15 @@ public class ServerConnection implements IServer {
     public void notifyObservers(final String text) {
         Objects.requireNonNull(text, "Text message cannot be null");
         observers.forEach(observer -> observer.showLogInformation(text));
+    }
+    
+    public void addClientObserver(final ClientObserver observer) {
+        Objects.requireNonNull(observer, "Observer cannot be null");
+        this.clientObservers.add(observer);
+    }
+
+    public void notifyClienObservers() {
+        clientObservers.forEach(observer -> observer.enableClientFields());
     }
 
     @Override
@@ -151,6 +162,7 @@ public class ServerConnection implements IServer {
             defaultMap.remove(c);
 
             notifyObservers("Client " + c.getNome() + " with IP " + c.getIp() + " is Offline");
+            notifyClienObservers();
         } else {
             notifyObservers("Client not found");
         }
